@@ -27,7 +27,6 @@ import java.util.HashMap;
 
 public class Function {
 
-
     static final String _ID = "_id";
     static final String KEY_THREAD_ID = "thread_id";
     static final String KEY_NAME = "name";
@@ -56,7 +55,6 @@ public class Function {
         DateFormat formatter = new SimpleDateFormat("dd/MM HH:mm");
         return formatter.format(date);
     }
-
 
     public static HashMap<String, String> mappingInbox(String _id, String thread_id, String name, String phone, String msg, String type, String timestamp, String time)
     {
@@ -99,9 +97,6 @@ public class Function {
         return gpList;
     }
 
-
-
-
     public static boolean sendSMS(String toPhoneNumber, String smsMessage) {
         try {
             SmsManager smsManager = SmsManager.getDefault();
@@ -116,11 +111,9 @@ public class Function {
 
 
     public static String getContactbyPhoneNumber(Context c, String phoneNumber) {
-
         Uri uri = Uri.withAppendedPath(ContactsContract.PhoneLookup.CONTENT_FILTER_URI, Uri.encode(phoneNumber));
         String[] projection = {ContactsContract.PhoneLookup.DISPLAY_NAME};
         Cursor cursor = c.getContentResolver().query(uri, projection, null, null, null);
-
         if (cursor == null) {
             return phoneNumber;
         }else {
@@ -134,7 +127,6 @@ public class Function {
             } finally {
                 cursor.close();
             }
-
             return name;
         }
     }

@@ -23,12 +23,10 @@ public class ContactsFragment extends Fragment {
 
     private static final int PERMISSIONS_REQUEST_READ_CONTACTS = 100;
 
-    Context context;
+    Context mContext;
     RecyclerView recyclerView;
     MyContactsRecyclerViewAdapter myContactsRecyclerViewAdapter;
-    // TODO: Customize parameter argument names
     private static final String ARG_COLUMN_COUNT = "column-count";
-    // TODO: Customize parameters
     private int mColumnCount = 1;
     private OnListFragmentInteractionListener mListener;
 
@@ -55,7 +53,7 @@ public class ContactsFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_contacts_list, container, false);
-        // Set the adapter
+        // Set the mChatAdapter
         if (view instanceof RecyclerView) {
             Context context = view.getContext();
              recyclerView = (RecyclerView) view;
@@ -72,8 +70,8 @@ public class ContactsFragment extends Fragment {
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
-        this.context=context;
-        ((MainActivity)context).fab.setVisibility(View.INVISIBLE);
+        this.mContext=context;
+        ((MainActivity)context).mFab.setVisibility(View.INVISIBLE);
         if (context instanceof OnListFragmentInteractionListener) {
             mListener = (OnListFragmentInteractionListener) context;
         } else {
@@ -96,8 +94,8 @@ public class ContactsFragment extends Fragment {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && getActivity().checkSelfPermission(Manifest.permission.READ_CONTACTS) != PackageManager.PERMISSION_GRANTED) {
             requestPermissions(new String[]{Manifest.permission.READ_CONTACTS}, PERMISSIONS_REQUEST_READ_CONTACTS);
         } else {
-            listContacts = new ContactFetcher(context).fetchAll();
-            myContactsRecyclerViewAdapter=new MyContactsRecyclerViewAdapter(listContacts,mListener,context);
+            listContacts = new ContactFetcher(mContext).fetchAll();
+            myContactsRecyclerViewAdapter=new MyContactsRecyclerViewAdapter(listContacts,mListener,mContext);
             recyclerView.setAdapter(myContactsRecyclerViewAdapter);
             Log.d("ProcessFlow",listContacts.get(0).getName());
         }
@@ -107,8 +105,8 @@ public class ContactsFragment extends Fragment {
     public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
         if (requestCode == PERMISSIONS_REQUEST_READ_CONTACTS) {
             if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                listContacts = new ContactFetcher(context).fetchAll();
-                myContactsRecyclerViewAdapter=new MyContactsRecyclerViewAdapter(listContacts,mListener,context);
+                listContacts = new ContactFetcher(mContext).fetchAll();
+                myContactsRecyclerViewAdapter=new MyContactsRecyclerViewAdapter(listContacts,mListener,mContext);
                 recyclerView.setAdapter(myContactsRecyclerViewAdapter);
             } else {
                 Log.e("Permissions", "Access denied");

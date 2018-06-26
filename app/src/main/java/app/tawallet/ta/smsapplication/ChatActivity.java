@@ -18,20 +18,19 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 
-public class ChatActivity extends AppCompatActivity {
-    RecyclerView recyclerView;
-    ChatAdapter adapter;
-    LoadSms loadsmsTask;
+public class ChatActivity extends AppCompatActivity implements View.OnClickListener {
+    RecyclerView mRecyclerView;
+    ChatAdapter mChatAdapter;
+    LoadSms mLoadSmsTask;
     String name;
     String address;
-    EditText new_message;
-    ImageButton send_message;
+    EditText mEditTextNewMessage;
+    ImageButton mImageButtonSendMessage;
     int thread_id_main;
     private Handler handler = new Handler();
-    Thread t;
-    ArrayList<HashMap<String, String>> smsList = new ArrayList<HashMap<String, String>>();
-    ArrayList<HashMap<String, String>> customList = new ArrayList<HashMap<String, String>>();
-    ArrayList<HashMap<String, String>> tmpList = new ArrayList<HashMap<String, String>>();
+    ArrayList<HashMap<String, String>> smsList = new ArrayList<>();
+    ArrayList<HashMap<String, String>> customList = new ArrayList<>();
+    ArrayList<HashMap<String, String>> tmpList = new ArrayList<>();
 
     LinearLayoutManager mLayoutManager = new LinearLayoutManager(this);
 
@@ -39,60 +38,85 @@ public class ChatActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_chat);
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        recyclerView=findViewById(R.id.recyclerView);
-        recyclerView.setLayoutManager(mLayoutManager);
-        new_message = (EditText) findViewById(R.id.new_message);
-        send_message = (ImageButton) findViewById(R.id.send_message);
+        setUpToolBar();
+        findViews();
         Intent intent = getIntent();
         try {
             name = intent.getStringExtra("name");
             address = intent.getStringExtra("address");
             thread_id_main = Integer.parseInt(intent.getStringExtra("thread_id"));
         }catch (Exception e){}
-        getSupportActionBar().setTitle(name);
+        setTitle(name);
         if (thread_id_main!=0) {
             startLoadingSms();
         }
-        send_message.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
-                String text = new_message.getText().toString();
-                if(text.length()>0) {
-                    String tmp_msg = text;
-                    new_message.setText("Sending....");
-                    new_message.setEnabled(false);
-                    if(Function.sendSMS(address, tmp_msg))
-                    {
-                        new_message.setText("");
-                        new_message.setEnabled(true);
-                        // Creating a custom list for newly added sms
-                        customList.clear();
-                        customList.addAll(smsList);
-                        customList.add(Function.mappingInbox(null, null, null, null, tmp_msg, "2", null, "Sending..."));
-                        adapter = new ChatAdapter(customList,ChatActivity.this);
-                        recyclerView.setAdapter(adapter);
-                    }else{
-                        new_message.setText(tmp_msg);
-                        new_message.setEnabled(true);
-                    }
-                }
-            }
-        });
+        mImageButtonSendMessage.setOnClickListener(this);
     }
 
-    public void startLoadingSms()
-    {
+    public void setTitle(String name){
+        getSupportActionBar().setTitle(name);
+    }
+
+    public void setUpToolBar(){
+        Toolbar toolbar =  findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+    }
+
+    public void findViews(){
+        mRecyclerView =findViewById(R.id.recyclerView);
+        mRecyclerView.setLayoutManager(mLayoutManager);
+        mEditTextNewMessage =  findViewById(R.id.new_message);
+        mImageButtonSendMessage =  findViewById(R.id.send_message);
+    }
+
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()){
+            case R.id.send_message:
+                Send_message();
+                break;
+            default:
+
+                break;
+        }
+    }
+
+    public void Send_message(){
+        String text = mEditTextNewMessage.getText().toString();
+        if(text.length()>0) {
+            String tmp_msg = text;
+            mEditTextNewMessage.setText("Sending....");
+            mEditTextNewMessage.setEnabled(false);
+            if(Function.sendSMS(address, tmp_msg))
+            {
+                mEditTextNewMessage.setText("");
+                mEditTextNewMessage.setEnabled(true);
+                // Creating a custom list for newly added sms
+                customList.clear();
+                customList.addAll(smsList);
+                customList.add(Function.mappingInbox(null, null, null, null, tmp_msg, "2", null, "Sending..."));
+                mChatAdapter = new ChatAdapter(customList,ChatActivity.this);
+                mRecyclerView.setAdapter(mChatAdapter);
+            }else{
+                mEditTextNewMessage.setText(tmp_msg);
+                mEditTextNewMessage.setEnabled(true);
+            }
+        }
+    }
+
+
+    public void startLoadingSms() {
         final Runnable r = new Runnable() {
             public void run() {
-                loadsmsTask = new LoadSms();
-                loadsmsTask.execute();
+                mLoadSmsTask = new LoadSms();
+                mLoadSmsTask.execute();
                 handler.postDelayed(this, 5000);
             }
         };
         handler.postDelayed(r, 0);
     }
+
 
     class LoadSms extends AsyncTask<String, Void, String> {
         @Override
@@ -124,7 +148,6 @@ public class ChatActivity extends AppCompatActivity {
                 }
                 c.close();
             }catch (IllegalArgumentException e) {
-                // TODO Auto-generated catch block
                 e.printStackTrace();
             }
             Collections.sort(tmpList, new MapComparator(Function.KEY_TIMESTAMP, "asc"));
@@ -137,12 +160,10 @@ public class ChatActivity extends AppCompatActivity {
             {
                 smsList.clear();
                 smsList.addAll(tmpList);
-                adapter = new ChatAdapter(smsList,ChatActivity.this);
-                recyclerView.setAdapter(adapter);
+                mChatAdapter = new ChatAdapter(smsList,ChatActivity.this);
+                mRecyclerView.setAdapter(mChatAdapter);
             }
         }
     }
-
-
 
 }
