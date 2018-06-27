@@ -58,7 +58,7 @@ public class Function {
 
     public static HashMap<String, String> mappingInbox(String _id, String thread_id, String name, String phone, String msg, String type, String timestamp, String time)
     {
-        HashMap<String, String> map = new HashMap<String, String>();
+        HashMap<String, String> map = new HashMap<>();
         map.put(_ID, _id);
         map.put(KEY_THREAD_ID, thread_id);
         map.put(KEY_NAME, name);
@@ -73,7 +73,7 @@ public class Function {
 
     public static ArrayList<HashMap<String, String>> removeDuplicates(ArrayList<HashMap<String, String>> smsList)
     {
-        ArrayList<HashMap<String, String>> gpList = new ArrayList<HashMap<String, String>>();
+        ArrayList<HashMap<String, String>> gpList = new ArrayList<>();
         for (int i = 0; i<smsList.size(); i++)
         {
             boolean available = false;
@@ -143,7 +143,6 @@ public class Function {
     public static Object readCachedFile (Context context, String key) throws IOException, ClassNotFoundException {
         FileInputStream fis = context.openFileInput (key);
         ObjectInputStream ois = new ObjectInputStream(fis);
-        Object object = ois.readObject ();
-        return object;
+        return ois.readObject ();
     }
 }

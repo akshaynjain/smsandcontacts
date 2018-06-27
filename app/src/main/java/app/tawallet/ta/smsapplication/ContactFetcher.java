@@ -16,7 +16,7 @@ public class ContactFetcher {
 
     private final Context context;
 
-    public ContactFetcher(Context c) {
+    ContactFetcher(Context c) {
         this.context = c;
     }
 
@@ -36,9 +36,9 @@ public class ContactFetcher {
 
         Cursor c = cursorLoader.loadInBackground();
 
-        final Map<String, Contact> contactsMap = new HashMap<>(c.getCount());
+        final Map<String, Contact> contactsMap = new HashMap<>(c != null ? c.getCount() : 0);
 
-        if (c.moveToFirst()) {
+        if (c != null && c.moveToFirst()) {
 
             int idIndex = c.getColumnIndex(ContactsContract.Contacts._ID);
             int nameIndex = c.getColumnIndex(ContactsContract.Contacts.DISPLAY_NAME);
@@ -52,7 +52,9 @@ public class ContactFetcher {
             } while (c.moveToNext());
         }
 
-        c.close();
+        if (c != null) {
+            c.close();
+        }
 
         matchContactNumbers(contactsMap);
         matchContactEmails(contactsMap);
@@ -60,7 +62,7 @@ public class ContactFetcher {
         return listContacts;
     }
 
-    public void matchContactNumbers(Map<String, Contact> contactsMap) {
+    private void matchContactNumbers(Map<String, Contact> contactsMap) {
         // Get numbers
         final String[] numberProjection = new String[]{
                 Phone.NUMBER,
@@ -75,7 +77,7 @@ public class ContactFetcher {
                 null,
                 null).loadInBackground();
 
-        if (phone.moveToFirst()) {
+        if (phone != null && phone.moveToFirst()) {
             final int contactNumberColumnIndex = phone.getColumnIndex(Phone.NUMBER);
             final int contactTypeColumnIndex = phone.getColumnIndex(Phone.TYPE);
             final int contactIdColumnIndex = phone.getColumnIndex(Phone.CONTACT_ID);
@@ -94,11 +96,12 @@ public class ContactFetcher {
                 phone.moveToNext();
             }
         }
-
-        phone.close();
+        if (phone != null) {
+            phone.close();
+        }
     }
 
-    public void matchContactEmails(Map<String, Contact> contactsMap) {
+    private void matchContactEmails(Map<String, Contact> contactsMap) {
         // Get email
         final String[] emailProjection = new String[]{
                 Email.DATA,
@@ -113,7 +116,7 @@ public class ContactFetcher {
                 null,
                 null).loadInBackground();
 
-        if (email.moveToFirst()) {
+        if (email != null && email.moveToFirst()) {
             final int contactEmailColumnIndex = email.getColumnIndex(Email.DATA);
             final int contactTypeColumnIndex = email.getColumnIndex(Email.TYPE);
             final int contactIdColumnsIndex = email.getColumnIndex(Email.CONTACT_ID);
@@ -133,6 +136,8 @@ public class ContactFetcher {
             }
         }
 
-        email.close();
+        if (email != null) {
+            email.close();
+        }
     }
 }

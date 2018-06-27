@@ -14,12 +14,12 @@ import java.util.HashMap;
 
 public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ViewHolder> {
 
-    ArrayList<HashMap<String, String>> smsList;
-    Context context;
+    private ArrayList<HashMap<String, String>> smsList;
+    private Context mContext;
 
-    public ChatAdapter(ArrayList<HashMap<String, String>> smsList, Context context) {
+    ChatAdapter(ArrayList<HashMap<String, String>> smsList, Context context) {
         this.smsList = smsList;
-        this.context = context;
+        this.mContext = context;
     }
 
     @NonNull
@@ -31,8 +31,7 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ViewHolder> {
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        HashMap < String, String > sms = new HashMap < String, String > ();
-        sms = smsList.get(position);
+        HashMap < String, String > sms = smsList.get(position);
         try {
             if(sms.get(Function.KEY_TYPE).contentEquals("1"))
             {
@@ -42,28 +41,30 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ViewHolder> {
                 holder.msgFrom.setVisibility(View.VISIBLE);
                 holder.msgYou.setVisibility(View.GONE);
             }else{
-                holder.lblMsgYou.setText("You");
+                holder.lblMsgYou.setText(R.string.sub_title_you);
                 holder.txtMsgYou.setText(sms.get(Function.KEY_MSG));
                 holder.timeMsgYou.setText(sms.get(Function.KEY_TIME));
                 holder.msgFrom.setVisibility(View.GONE);
                 holder.msgYou.setVisibility(View.VISIBLE);
             }
-        } catch (Exception e) {}
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
-    public class ViewHolder extends RecyclerView.ViewHolder{
+    class ViewHolder extends RecyclerView.ViewHolder{
         LinearLayout msgFrom, msgYou;
         TextView txtMsgYou, lblMsgYou, timeMsgYou, lblMsgFrom, txtMsgFrom, timeMsgFrom;
-        public ViewHolder(View itemView) {
+        ViewHolder(View itemView) {
             super(itemView);
-            txtMsgYou = (TextView)itemView.findViewById(R.id.txtMsgYou);
-            lblMsgYou = (TextView)itemView.findViewById(R.id.lblMsgYou);
-            timeMsgYou = (TextView)itemView.findViewById(R.id.timeMsgYou);
-            lblMsgFrom = (TextView)itemView.findViewById(R.id.lblMsgFrom);
-            timeMsgFrom = (TextView)itemView.findViewById(R.id.timeMsgFrom);
-            txtMsgFrom = (TextView)itemView.findViewById(R.id.txtMsgFrom);
-            msgFrom = (LinearLayout)itemView.findViewById(R.id.msgFrom);
-            msgYou = (LinearLayout)itemView.findViewById(R.id.msgYou);
+            txtMsgYou = itemView.findViewById(R.id.txtMsgYou);
+            lblMsgYou = itemView.findViewById(R.id.lblMsgYou);
+            timeMsgYou = itemView.findViewById(R.id.timeMsgYou);
+            lblMsgFrom = itemView.findViewById(R.id.lblMsgFrom);
+            timeMsgFrom = itemView.findViewById(R.id.timeMsgFrom);
+            txtMsgFrom = itemView.findViewById(R.id.txtMsgFrom);
+            msgFrom = itemView.findViewById(R.id.msgFrom);
+            msgYou = itemView.findViewById(R.id.msgYou);
         }
     }
     

@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
@@ -24,7 +25,7 @@ public class ContactsFragment extends Fragment {
     private static final int PERMISSIONS_REQUEST_READ_CONTACTS = 100;
 
     Context mContext;
-    RecyclerView recyclerView;
+    RecyclerView mRecyclerView;
     MyContactsRecyclerViewAdapter myContactsRecyclerViewAdapter;
     private static final String ARG_COLUMN_COUNT = "column-count";
     private int mColumnCount = 1;
@@ -51,16 +52,16 @@ public class ContactsFragment extends Fragment {
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_contacts_list, container, false);
         // Set the mChatAdapter
         if (view instanceof RecyclerView) {
             Context context = view.getContext();
-             recyclerView = (RecyclerView) view;
+             mRecyclerView = (RecyclerView) view;
             if (mColumnCount <= 1) {
-                recyclerView.setLayoutManager(new LinearLayoutManager(context));
+                mRecyclerView.setLayoutManager(new LinearLayoutManager(context));
             } else {
-                recyclerView.setLayoutManager(new GridLayoutManager(context, mColumnCount));
+                mRecyclerView.setLayoutManager(new GridLayoutManager(context, mColumnCount));
             }
             requestContacts();
         }
@@ -96,18 +97,18 @@ public class ContactsFragment extends Fragment {
         } else {
             listContacts = new ContactFetcher(mContext).fetchAll();
             myContactsRecyclerViewAdapter=new MyContactsRecyclerViewAdapter(listContacts,mListener,mContext);
-            recyclerView.setAdapter(myContactsRecyclerViewAdapter);
+            mRecyclerView.setAdapter(myContactsRecyclerViewAdapter);
             Log.d("ProcessFlow",listContacts.get(0).getName());
         }
     }
 
     @Override
-    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         if (requestCode == PERMISSIONS_REQUEST_READ_CONTACTS) {
             if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                 listContacts = new ContactFetcher(mContext).fetchAll();
                 myContactsRecyclerViewAdapter=new MyContactsRecyclerViewAdapter(listContacts,mListener,mContext);
-                recyclerView.setAdapter(myContactsRecyclerViewAdapter);
+                mRecyclerView.setAdapter(myContactsRecyclerViewAdapter);
             } else {
                 Log.e("Permissions", "Access denied");
             }

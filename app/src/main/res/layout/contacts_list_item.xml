@@ -1,37 +1,31 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:customAttrs="http://schemas.android.com/apk/res-auto"
+    android:baselineAligned="false"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     xmlns:tools="http://schemas.android.com/tools"
     android:weightSum="1"
     android:descendantFocusability="blocksDescendants"
     android:padding="5dp">
-
     <LinearLayout
-            android:layout_width="100dp"
-            android:layout_height="wrap_content"
-            android:gravity="center"
-            android:orientation="vertical">
-
-            <ImageView
+        android:layout_width="100dp"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:orientation="vertical">
+        <android.support.v7.widget.AppCompatImageView
+            android:contentDescription="@string/title_text"
             android:id="@+id/inbox_thumb"
             android:layout_width="50dp"
             android:layout_height="50dp"
             android:src="@mipmap/ic_launcher"/>
-
-
     </LinearLayout>
-
-
     <LinearLayout
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:gravity="left"
-            android:orientation="vertical">
-
-            <TextView
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:gravity="left"
+        android:orientation="vertical">
+        <android.support.v7.widget.AppCompatTextView
             android:id="@+id/inbox_user"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -42,9 +36,7 @@
             android:ellipsize="end"
             android:maxLines="1"
             android:textSize="16sp"/>
-
-
-            <TextView
+        <android.support.v7.widget.AppCompatTextView
             android:id="@+id/inbox_msg"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -54,7 +46,5 @@
             android:ellipsize="end"
             android:maxLines="1"
             android:textSize="16sp"/>
-
-
     </LinearLayout>
 </LinearLayout>

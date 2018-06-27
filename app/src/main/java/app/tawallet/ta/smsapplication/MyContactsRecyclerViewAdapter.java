@@ -1,10 +1,8 @@
 package app.tawallet.ta.smsapplication;
 
 import android.content.Context;
-import android.database.Cursor;
-import android.provider.ContactsContract;
+import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,25 +17,26 @@ import java.util.ArrayList;
 import app.tawallet.ta.smsapplication.ContactsFragment.OnListFragmentInteractionListener;
 public class MyContactsRecyclerViewAdapter extends RecyclerView.Adapter<MyContactsRecyclerViewAdapter.ViewHolder> {
 
-    ArrayList<Contact> listContacts;
+    private ArrayList<Contact> listContacts;
     private final OnListFragmentInteractionListener mListener;
-    Context context;
+    private Context context;
 
-    public MyContactsRecyclerViewAdapter(ArrayList<Contact> listContacts, OnListFragmentInteractionListener listener, Context context) {
+    MyContactsRecyclerViewAdapter(ArrayList<Contact> listContacts, OnListFragmentInteractionListener listener, Context context) {
         this.listContacts=listContacts;
         mListener = listener;
         this.context=context;
     }
 
 
+    @NonNull
     @Override
-    public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.contacts_list_item, parent, false);
         return new ViewHolder(view);
     }
 
     @Override
-    public void onBindViewHolder(final ViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull final ViewHolder holder, int position) {
 
         holder.inbox_user.setText(listContacts.get(position).getName());
         if (!listContacts.get(position).getNumbers().isEmpty()) {
@@ -64,15 +63,15 @@ public class MyContactsRecyclerViewAdapter extends RecyclerView.Adapter<MyContac
         return listContacts.size();
     }
 
-    public class ViewHolder extends RecyclerView.ViewHolder {
+    class ViewHolder extends RecyclerView.ViewHolder {
         ImageView inbox_thumb;
         TextView inbox_user, inbox_msg;
 
-        public ViewHolder(View view) {
+        ViewHolder(View view) {
             super(view);
-            inbox_thumb = (ImageView) view.findViewById(R.id.inbox_thumb);
-            inbox_user = (TextView) view.findViewById(R.id.inbox_user);
-            inbox_msg = (TextView) view.findViewById(R.id.inbox_msg);
+            inbox_thumb =  view.findViewById(R.id.inbox_thumb);
+            inbox_user =  view.findViewById(R.id.inbox_user);
+            inbox_msg =  view.findViewById(R.id.inbox_msg);
         }
     }
 }

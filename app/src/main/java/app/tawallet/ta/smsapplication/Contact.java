@@ -35,16 +35,16 @@ public class Contact {
 		this.numbers = numbers;
 	}
 
-	public String id;
-	public String name;
-	public ArrayList<ContactEmail> emails;
-	public ArrayList<ContactPhone> numbers;
+	private String id;
+	private String name;
+	private ArrayList<ContactEmail> emails;
+	private ArrayList<ContactPhone> numbers;
 
-	public Contact(String id, String name) {
+	Contact(String id, String name) {
 		this.id = id;
 		this.name = name;
-		this.emails = new ArrayList<ContactEmail>();
-		this.numbers = new ArrayList<ContactPhone>();
+		this.emails = new ArrayList<>();
+		this.numbers = new ArrayList<>();
 	}
 
 	@Override

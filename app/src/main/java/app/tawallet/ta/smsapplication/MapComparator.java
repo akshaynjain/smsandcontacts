@@ -8,7 +8,7 @@ public class MapComparator implements Comparator<HashMap<String, String>>
     private final String key;
     private final String order;
 
-    public MapComparator(String key, String order)
+    MapComparator(String key, String order)
     {
         this.key = key;
         this.order = order;

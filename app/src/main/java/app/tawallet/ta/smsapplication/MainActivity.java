@@ -81,7 +81,6 @@ public class MainActivity extends AppCompatActivity implements ItemFragment.OnLi
             startActivity(intent);
         }else {
             Toast.makeText(MainActivity.this,"No Number Found",Toast.LENGTH_SHORT).show();
-            return;
         }
     }
 
@@ -137,8 +136,6 @@ public class MainActivity extends AppCompatActivity implements ItemFragment.OnLi
                 FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
                 transaction.add(R.id.container, fragment,"sms");
                 transaction.commit();
-            }else {
-
             }
         }
     }
